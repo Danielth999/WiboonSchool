@@ -1,0 +1,37 @@
+# Node modules folder (จำพวก dependency ของ Node.js)
+node_modules/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# Env files (เก็บความลับเช่น API keys, DB passwords)
+.env
+.env.*.local
+
+# Tailwind CSS build folder (ถ้าคุณ build ไปโฟลเดอร์เฉพาะ เช่น public/css)
+public/css/
+
+# Composer vendor folder (ถ้าใช้ composer install)
+vendor/
+
+# PHPStorm IDE files (ถ้าใช้ PHPStorm)
+.idea/
+
+# Mac OS metadata files
+.DS_Store
+
+# Thumbs.db (Windows)
+Thumbs.db
+
+# Build folders (ถ้าคุณมี build process)
+dist/
+build/
+
+# Cache files
+.cache/

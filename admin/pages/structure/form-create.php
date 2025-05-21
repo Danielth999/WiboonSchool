@@ -1,0 +1,168 @@
+<?php
+session_start();
+require_once('../authen.php');
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>เพิ่มโครงสร้าง | โรงเรียนวิบูลวิทยา</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../../plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="../../assets/css/adminlte.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <?php include_once('../includes/sidebar.php') ?>
+        <div class="content-wrapper pt-3">
+            <!-- Main content -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card shadow">
+                                <div class="card-header border-0 pt-4">
+                                    <h4>
+                                        <i class="fas fa-users"></i>
+                                        เพิ่มข้อมูล
+                                    </h4>
+                                    <div class="alert alert-warning mt-3" role="alert">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <strong>หมายเหตุ:</strong> ห้ามอัพโหลดไฟล์รูปภาพที่มีขนาดเกิน 2 MB
+                                    </div>
+                                    <a href="./" class="btn btn-info mt-3">
+                                        <i class="fas fa-list"></i>
+                                        กลับหน้าหลัก
+                                    </a>
+                                </div>
+                                <form id="formCreate" method="POST" enctype="multipart/form-data">
+                                    <div class="card-body">
+                                        <div class="row justify-content-center">
+                                            <div class="col-xl-6 px-1 px-md-5">
+
+                                                <div class="form-group">
+                                                    <label for="department">กลุ่มงาน</label>
+
+                                                    <input type="text" class="form-control" name="department"
+                                                        id="department" placeholder="กลุ่มงาน" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="file_upload">อัพโหลดไฟล์ภาพ</label>
+                                                    <input type="file" class="form-control" name="file_upload"
+                                                        id="file_upload" accept=".png,.jpg,.jpeg,.webp">
+                                                    <small class="form-text text-muted">
+                                                        เลือกไฟล์ภาพที่ต้องการอัพโหลด (jpg, jpeg, png, webp)<br>
+                                                        <span style="color:red;">* ขนาดไฟล์ต้องไม่เกิน 2 MB</span>
+                                                    </small>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="status">สถานะเผยแพร่</label>
+                                                    <select class="form-control" name="status" id="status" required>
+                                                        <option value="1" selected>เผยแพร่</option>
+                                                        <option value="0">ไม่เผยแพร่</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-primary btn-block mx-auto w-50"
+                                            name="submit">บันทึกข้อมูล</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php include_once('../includes/footer.php') ?>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="../../assets/js/adminlte.min.js"></script>
+
+    <script>
+        document.getElementById('file_upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.size > 2 * 1024 * 1024) {
+                Swal.fire({
+                    text: 'ขนาดไฟล์ใหญ่เกินไป (ไม่เกิน 2 MB)',
+                    icon: 'error',
+                    confirmButtonText: 'ตกลง'
+                });
+                e.target.value = '';
+            }
+        });
+
+        $(document).ready(function() {
+            // เมื่อฟอร์มถูกส่ง
+            $('#formCreate').on('submit', function(e) {
+                // ตรวจสอบขนาดไฟล์ก่อน submit
+                var fileInput = document.getElementById('file_upload');
+                if (fileInput.files.length > 0 && fileInput.files[0].size > 2 * 1024 * 1024) {
+                    Swal.fire({
+                        text: 'ขนาดไฟล์ใหญ่เกินไป (ไม่เกิน 2 MB)',
+                        icon: 'error',
+                        confirmButtonText: 'ตกลง'
+                    });
+                    e.preventDefault();
+                    return false;
+                }
+
+                e.preventDefault(); // ป้องกันการ submit แบบปกติ
+
+                // สร้าง FormData object เพื่อส่งข้อมูลรวมถึงไฟล์
+                var formData = new FormData(this);
+
+                // ส่งข้อมูลผ่าน AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '../../service/structure/create.php', // URL ของไฟล์ที่จะรับข้อมูล
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    cache: false,
+                    dataType: 'json', // กำหนดให้รับข้อมูลจากเซิร์ฟเวอร์ในรูปแบบ JSON
+                    success: function(response) {
+                        // ตรวจสอบคำตอบจากเซิร์ฟเวอร์ที่ได้รับในรูปแบบ JSON
+                        if (response.status == 'success') {
+                            Swal.fire({
+                                title: 'สำเร็จ!',
+                                text: response.message,
+                                icon: 'success',
+                                confirmButtonText: 'ตกลง'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href =
+                                        "./"; // กลับไปหน้าหลักหลังจากบันทึกสำเร็จ
+                                }
+                            });
+                        } else {
+                            Swal.fire('เกิดข้อผิดพลาด!', response.message, 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('เกิดข้อผิดพลาด!', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้',
+                            'error');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

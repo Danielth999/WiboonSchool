@@ -1,0 +1,64 @@
+@import "tailwindcss";
+/* ตั้งค่าฟอนต์ให้ทั้งเว็บ */
+@layer base {
+    body {
+      font-family: 'Prompt', sans-serif;
+      color: #333333;
+      background-color: #f1f3f5;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;   
+      max-width: 100%;
+    overflow-x: hidden;
+
+    }
+    html{
+      scroll-behavior: smooth;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+
+  }
+
+  /* COLOR  */
+  @layer utilities {
+    .bg-school-gradient {
+      background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(220, 53, 69, 0.1));
+    }
+    
+    .text-warning {
+      color: #ffc107;
+    }
+  
+    .hover\:text-warning:hover {
+      color: #ffc107;
+    }
+  
+    .text-danger {
+      color: #D32F2F;
+    }
+  
+    .hover\:text-danger:hover {
+      color: #D32F2F;
+    }
+    
+    .bg-warning {
+      background-color: #ffc107;
+    }
+  
+    .bg-danger {
+      background-color: #D32F2F;
+    }
+  }
+  
+  @theme {
+    --breakpoint-*:initial;
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+
+  }
